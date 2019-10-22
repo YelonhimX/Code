@@ -1,17 +1,19 @@
 
 # 学习Python爬虫
 
-
 - 本文按网易公开课[Python网络爬虫与信息提取](http://www.icourse163.org/course/BIT-1001870001?tid=1206951268)整理。
 
 ## 1. Requests库使用
 
 ### 1.1. 安装requests库
 以管理员模式运行`cmd`，输入命令：
+
 ```
 pip install requests
 ```
+
 等待即可完成安装。
+
 ### 1.2. 抓取工具的基本代码格式
 
 ```python
@@ -53,12 +55,15 @@ except:                                 # 如果出现异常
             kv = {'key1':'value1','key2':'value2'}
             r = requests.request('POST',url,params = kv) #等于requests.post(url,params = kv)
             ```
+
             此时url为：
+
             ```
             http://www.example.com/?key1=value1&key2=value2
             ```
 
         * data：字典、字节序列或文件对象，作为Request的内容
+
             ```python
             body = 'main content'
             requests.request('POST','url',data = body)
@@ -73,21 +78,24 @@ except:                                 # 如果出现异常
         * auth：元祖类型，支持HTTP认证功能
 
         * files：字典类型，传输文件
+
             ```python
             fs = {'file':open('data.xls','rb')}
             r = requests.request('POST',url,files = fs)
             ```
 
         * timeout：设定超时时间，秒为单位
+
             ```python
             r = requests.request('GET',url,timeout = 10)
 
         * proxies：字典类型，设定访问代理服务器，可以增加登录认证
+
             ```python
             pxs = {'http':'proxy1'
                     'https':'proxy2'}
             r = requests.request('GET',url,proxies = pxs)    
-        
+
         * allow_redirects：True/False，默认为True，重定向开关
 
         * stream：T/F,默认为True，获取内容立即下载开关
@@ -97,36 +105,52 @@ except:                                 # 如果出现异常
         * cert：本地SSL证书路径
 
 ### 1.4. 对于亚马逊等网站审查的应对办法
+
 亚马逊等网站通过对`User_Agent`的审查来限制网络爬虫的访问，这时，需要对访问的头文件信息进行修改，伪装成浏览器对网站服务器进行访问。
 
 构造一个键值对：
+
 ```python
 kv = {'User_Agent' : 'Mozilla/5.0'}
 ```
+
 在使用`requests.get`函数时，加入如下参数：
-```python = requests.get("网址", headers = kv)
+
+```python
+python = requests.get("网址", headers = kv)
 ```
+
 便可正常抓取页面内容。
+
 ### 1.5. 添加关键词抓取
+
 例如百度、360等搜索引擎，抓取添加关键词进行搜索后的信息，用到向网页添加内容的`params`参数。
 
 以要搜索`python`为例，
 
 构造键值对：
+
 ```python
 kv = {'wd':'python' }
 #`wd`为搜索引擎关键词索引目录，不同搜索引擎各不相同，这里以百度为例
 ```
+
 在`get`函数中加入参数`params`
+
 ```python
 r = requests.get(url, params = kv)
 ```
+
 获取返回结果长度可以用函数
+
 ```python
 len(r.text)
 ```
+
 ### 1.6. 网络图片的抓取和存储
+
 完整代码框架如下：
+
 ```python
 import requests
 import os #这里需要额外引入一个os读写库
@@ -140,23 +164,29 @@ try:
         r = requests.get(url)#爬取信息
         with open(path,'wb') as f:#用with open将二进制数据转写到图片中
             f.write(r.content)#将图片的二进制内容刻录到图片中
-            
+
             print("文件保存成功")
     else:
         print("文件已存在")
 except:
     print("爬取失败")
 ```
+
 ## 2. BeautifulSoup的使用
 
 ### 2.1. BeautifulSoup的安装
+
 `cmd`中输入指令：
-```
+
+```cmd
+
 pip install beautifulsoup4
 ```
+
 即可安装。
 
 ### 2.2. Suop对象的使用方法
+
 * <>.find_all(name,attrs,recursive,string,**kwarg)
     - name:对标签名称的检索字符串
     - attrs:对标签属性值的检索字符串，可标注属性检索
@@ -164,12 +194,18 @@ pip install beautifulsoup4
     - string:<>...</>中字符串区域的检索字符串
 
 ### 2.3. 使用bs4对爬取的Html信息进行优化
+
 首先从`bs4`库中引用`BeautifulSoup`类
+
 ```python
+
 from bs4 import BeautifulSoup
 ```
+
 随后
+
 ```python
+
 from bs4 import BeautifulSoup
 import requests
 r = requests.get("http://python123.io/ws/demo.html")#get函数爬取网页数据
@@ -179,6 +215,7 @@ print(soup.prettify())#调用soup类中的属性将html文本美化
 ```
 
 ### 2.4. 爬取中国大学排行代码实例
+
 ```python
 import requests
 import bs4
@@ -225,10 +262,13 @@ def main():
     printOut(uinfo,int(num))
 main()
 ```
+
 ## 3. 正则表达式和爬虫进阶
 
 ### 3.1. 正则表达式导学
+
 `正则表达式`(Regular Expression、Regex、RE)，是用来简介表达一组字符串的表达式。
+
 ```RE
 'PN'
 'PYN'
@@ -236,6 +276,7 @@ main()
 'PYTHN'
 'PYTHON'
 ```
+
 - 通用的字符串表达框架
 
 - 简洁表达一组字符串的表达式
@@ -245,22 +286,28 @@ main()
 - 用在数据信息处理的字符串匹配中
 
 需要用代码
+
 ```python
+
 p = re.comile(regex)
 ```
+
 编译，即将符合正则表达式语法的字符串转换成正则表达式特征。
 
 ### 3.2. 正则表达式语法
+
 >参看
 https://www.jb51.net/tools/zhengze.html
 
 ### 3.3. Re库使用
+
 * Python使用`raw string`类型表达正则表达式，即原生字符串类型。
 例如：
 
 ```python
 r'text'
 ```
+
 * `string`类型，将`\`理解为转义符，表达更为繁琐。
 
 |函数|说明|
@@ -293,16 +340,21 @@ r'text'
 
 4. re.split(**pattern**,**string**,**maxsplit = 0**,**flags = 0**)
     * maxsplit是最大分割数，剩余部分作为一个整体最后输出出来
+
         ```python
         import re
 
         ls = re.split(r'[1-9]\d{5}','TSU100081 100084BIT ',maxsplit=1):
             print(ls)
         ```
+
         输出
+
         ```
+
         ['TSU', ' 100084BIT '] 
         ```
+
         即将匹配到的第一个部分剩余的字符切割出来，而后面的部分作为一个整体输出   
 
 5. re.finditer
@@ -312,11 +364,12 @@ r'text'
 
     for m in re.finditer(r'[1-9]\d{5}','TSU100081 100084BIT '):
         print(m.group(0))
-        
-    ```
-    输出
 
     ```
+
+    输出
+
+    ```markdown
     10081
     10084
     ```
@@ -336,9 +389,11 @@ r'text'
         ```
 
         输出
-        ```
+
+        ```markdown
         BIT :zipcode TSU :zipcode
         ```
+
 7. re库的等价用法
 
 ```python
@@ -347,6 +402,7 @@ pat = re.compile(r'[1-9]\d{5}')
 rst = pat.search('BIT 100081')
 #面向对象用法，进行编译以后可以多次操作  
 ```
+
 * regex = re.compile(**pattern**, **flags = 0**)
     - 将正则表达式的字符串形势编译成正则表达式对象
     - 用法和re库一致
@@ -374,12 +430,15 @@ rst = pat.search('BIT 100081')
 ### 3.5. Match库的贪婪匹配和最小匹配
 
 1. Re库默认采用贪婪匹配，即输出匹配最长的子串
+
 ```python
 match = re.search(r'PY.*N','PYANBNCNDN')
 match.group(0)
 ```
+
 输出
-```
+
+```markdown
 PYANBNCNDN
 ```
 
@@ -393,6 +452,9 @@ PYANBNCNDN
     |{m,n}?|扩展前一个字符m至n次(含n)，最小匹配|
 
 ## 4.应用实例————爬取淘宝网商品信息
+
+### 4.1代码示例
+
 ```python
 import requests
 import re
@@ -431,7 +493,7 @@ def editData(plist,html):
         for i in range(len(prt)):
             prize = prt[i].split(':')[1].strip("\" ")
             itname = nmt[i].split(':')[1].strip("\"")
-            plist.append([prize,itname])       
+            plist.append([prize,itname])
     except:
         return False
 def printOut(plist):
@@ -439,7 +501,7 @@ def printOut(plist):
     print(tplt.format("价格","商品名"))
     for j in plist:
         print(tplt.format(j[0],j[1]))
-        
+
 def main():
     turl = "https://s.taobao.com/search?q="
     item = input("请输入你想搜索的物品：")
@@ -447,7 +509,7 @@ def main():
     depth = int(depth)
     cnt = []
     for i in range(depth):
-        try: 
+        try:
             url = turl + item + "&s=" + str(44*i)
             html = getHTML(url)
             editData(cnt,html)
@@ -459,7 +521,71 @@ main()
 
 ```
 
+### 4.2对字符串对象的split方法
 
+内容来源[runoob.com](https://www.runoob.com/python3/python3-string-split.html)。
+
+1. 描述
+
+    `split()` 通过指定分隔符对字符串进行切片，如果第二个参数 num 有指定值，则分割为 num+1 个子字符串。
+2. 语法
+
+    `split()` 方法语法：
+
+    ```python
+        str.split(str="", num=string.count(str))
+    ```
+
+3. 参数
+
+    ***str*** -- 分隔符，默认为所有的空字符，包括空格、换行(\n)、制表符(\t)等。
+
+    ***num*** -- 分割次数。默认为 **-1**, 即分隔所有。
+
+4. 返回值
+    返回分割后的字符串**列表**。
+
+5. 实例
+
+    以下实例展示了 split() 函数的使用方法：
+
+    ```python
+    实例(Python 3.0+)
+    #!/usr/bin/python3
+
+    str = "this is string example....wow!!!"
+    print (str.split( ))       # 以空格为分隔符
+    print (str.split('i',1))   # 以 i 为分隔符
+    print (str.split('w'))     # 以 w 为分隔符
+    ```
+
+    以上实例输出结果如下：
+
+    ```python
+    ['this', 'is', 'string', 'example....wow!!!']
+    ['th', 's is string example....wow!!!']
+    ['this is string example....', 'o', '!!!']
+    ```
+
+    以下实例以`#`号为分隔符，指定第二个参数为`1`，返回两个参数列表。
+
+    ```python
+    实例(Python 3.0+)
+    #!/usr/bin/python3
+
+    txt = "Google#Runoob#Taobao#Facebook"
+
+    # 第二个参数为 1，返回两个参数列表
+    x = txt.split("#", 1)
+
+    print(x)
+    ```
+
+    以上实例输出结果如下：
+
+    ```python
+    ['Google', 'Runoob#Taobao#Facebook']
+    ```
 
 
 
