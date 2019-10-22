@@ -38,7 +38,7 @@ def printOut(ulist,num):
 def main():
 
     uinfo = []
-    num = input()
+    num = input("请输入您想要查看至的大学排名：")
     url = "http://www.zuihaodaxue.com/zuihaodaxuepaiming2019.html"
     html =getHTML(url)
     putINList(uinfo,html)
