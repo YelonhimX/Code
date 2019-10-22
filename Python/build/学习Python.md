@@ -1,6 +1,33 @@
 
 # 学习Python爬虫
+<!-- TOC -->
 
+- [学习Python爬虫](#学习python爬虫)
+    - [1. Requests库使用](#1-requests库使用)
+        - [1.1. 安装requests库](#11-安装requests库)
+        - [1.2. 抓取工具的基本代码格式](#12-抓取工具的基本代码格式)
+        - [1.3. Requests.request()方法的参数](#13-requestsrequest方法的参数)
+        - [1.4. 对于亚马逊等网站审查的应对办法](#14-对于亚马逊等网站审查的应对办法)
+        - [1.5. 添加关键词抓取](#15-添加关键词抓取)
+        - [1.6. 网络图片的抓取和存储](#16-网络图片的抓取和存储)
+    - [2. BeautifulSoup的使用](#2-beautifulsoup的使用)
+        - [2.1. BeautifulSoup的安装](#21-beautifulsoup的安装)
+        - [2.2. Suop对象的使用方法](#22-suop对象的使用方法)
+        - [2.3. 使用bs4对爬取的Html信息进行优化](#23-使用bs4对爬取的html信息进行优化)
+        - [2.4. 爬取中国大学排行代码实例](#24-爬取中国大学排行代码实例)
+    - [3. 正则表达式和爬虫进阶](#3-正则表达式和爬虫进阶)
+        - [3.1. 正则表达式导学](#31-正则表达式导学)
+        - [3.2. 正则表达式语法](#32-正则表达式语法)
+        - [3.3. Re库使用](#33-re库使用)
+        - [3.4. re库中的match对象](#34-re库中的match对象)
+        - [3.5. Match库的贪婪匹配和最小匹配](#35-match库的贪婪匹配和最小匹配)
+    - [4.应用实例————爬取淘宝网商品信息](#4应用实例爬取淘宝网商品信息)
+        - [4.1代码示例](#41代码示例)
+        - [4.2对字符串对象的split方法](#42对字符串对象的split方法)
+    - [5.Scrapy爬虫的使用](#5scrapy爬虫的使用)
+        - [5.1](#51)
+
+<!-- /TOC -->
 - 本文按网易公开课[Python网络爬虫与信息提取](http://www.icourse163.org/course/BIT-1001870001?tid=1206951268)整理。
 
 ## 1. Requests库使用
@@ -396,16 +423,16 @@ r'text'
 
 7. re库的等价用法
 
-```python
-import re
-pat = re.compile(r'[1-9]\d{5}')  
-rst = pat.search('BIT 100081')
-#面向对象用法，进行编译以后可以多次操作  
-```
+    ```python
+    import re
+    pat = re.compile(r'[1-9]\d{5}')  
+    rst = pat.search('BIT 100081')
+    #面向对象用法，进行编译以后可以多次操作  
+    ```
 
-* regex = re.compile(**pattern**, **flags = 0**)
-    - 将正则表达式的字符串形势编译成正则表达式对象
-    - 用法和re库一致
+    * regex = re.compile(**pattern**, **flags = 0**)
+        - 将正则表达式的字符串形势编译成正则表达式对象
+        - 用法和re库一致
 
 ### 3.4. re库中的match对象
 
@@ -455,71 +482,71 @@ PYANBNCNDN
 
 ### 4.1代码示例
 
-    ```python
-    import requests
-    import re
-    from bs4 import BeautifulSoup
-    import bs4
+        ```python
+        import requests
+        import re
+        from bs4 import BeautifulSoup
+        import bs4
 
-    def getHTML(url):
-        '''
-        需要注意的是，淘宝页面爬取需要登录cookies
-        以下12行到16行就是编辑cookies的过程
-        '''
-        kv = {'User_Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36'}
-        usercookies = "t=684edbb0ad3447a0b8309bde706ee296; cna=xWPyFVosrVcCAW8oxZC1M8XM; thw=cn; lgc=tb13289283; tracknick=tb13289283; tg=0; mt=ci=0_1; enc=GN0eYRLiSZPf1YYgGyb8Ggz3VzkPmCaiS%2FFLixhxJ%2BMZ8XOES758bNgiDgPK5iURfflbWCxng9xGCeAMKhGmBg%3D%3D; x=e%3D1%26p%3D*%26s%3D0%26c%3D0%26f%3D0%26g%3D0%26t%3D0%26__ll%3D-1%26_ato%3D0; v=0; cookie2=743b5aebbebb887827b23da274a82893; _tb_token_=9ba5e6b78753; unb=3365090684; uc3=id2=UNN79Hu46I5xQA%3D%3D&lg2=U%2BGCWk%2F75gdr5Q%3D%3D&nk2=F5REPQPr65EmWw%3D%3D&vt3=F8dByuHZ7kjZ2ravrg4%3D; csg=d34362a0; cookie17=UNN79Hu46I5xQA%3D%3D; dnk=tb13289283; skt=bb5f94bd37fe92dc; existShop=MTU2OTY5MzUyMQ%3D%3D; uc4=id4=0%40UgQz1yN%2FASfQtG9PoxEcMkmAUfGB&nk4=0%40FY4Pb2hzCHoyQ4FwG2dj1LPTn%2BuX; _cc_=V32FPkk%2Fhw%3D%3D; _l_g_=Ug%3D%3D; sg=34b; _nk_=tb13289283; cookie1=BxUMWqCyesrnB24sCMMgaPAcJDMobZCxwzk2nipIoB4%3D; uc1=cookie16=V32FPkk%2FxXMk5UvIbNtImtMfJQ%3D%3D&cookie21=W5iHLLyFeYZ1WM9hVnmS&cookie15=VFC%2FuZ9ayeYq2g%3D%3D&existShop=false&pas=0&cookie14=UoTaEcfFG6o%2BXQ%3D%3D&tag=8&lng=zh_CN; isg=BJmZudLmIId4X_zwzCi5TqgmqIVzJo3Ymatt-LtOIEA5wrlUA3adqAfQwIa0-iUQ; l=cBSbiUkPqHNT9TbyBOCanurza77OSIRYYuPzaNbMi_5aw6Tsi6QOk6DxIF96VjWd9NTB4tm2-gv9-etkZ8--WOHgcGAN."
-        #审查元素——搜索sw.js
+        def getHTML(url):
+            '''
+            需要注意的是，淘宝页面爬取需要登录cookies
+            以下12行到16行就是编辑cookies的过程
+            '''
+            kv = {'User_Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36'}
+            usercookies = "t=684edbb0ad3447a0b8309bde706ee296; cna=xWPyFVosrVcCAW8oxZC1M8XM; thw=cn; lgc=tb13289283; tracknick=tb13289283; tg=0; mt=ci=0_1; enc=GN0eYRLiSZPf1YYgGyb8Ggz3VzkPmCaiS%2FFLixhxJ%2BMZ8XOES758bNgiDgPK5iURfflbWCxng9xGCeAMKhGmBg%3D%3D; x=e%3D1%26p%3D*%26s%3D0%26c%3D0%26f%3D0%26g%3D0%26t%3D0%26__ll%3D-1%26_ato%3D0; v=0; cookie2=743b5aebbebb887827b23da274a82893; _tb_token_=9ba5e6b78753; unb=3365090684; uc3=id2=UNN79Hu46I5xQA%3D%3D&lg2=U%2BGCWk%2F75gdr5Q%3D%3D&nk2=F5REPQPr65EmWw%3D%3D&vt3=F8dByuHZ7kjZ2ravrg4%3D; csg=d34362a0; cookie17=UNN79Hu46I5xQA%3D%3D; dnk=tb13289283; skt=bb5f94bd37fe92dc; existShop=MTU2OTY5MzUyMQ%3D%3D; uc4=id4=0%40UgQz1yN%2FASfQtG9PoxEcMkmAUfGB&nk4=0%40FY4Pb2hzCHoyQ4FwG2dj1LPTn%2BuX; _cc_=V32FPkk%2Fhw%3D%3D; _l_g_=Ug%3D%3D; sg=34b; _nk_=tb13289283; cookie1=BxUMWqCyesrnB24sCMMgaPAcJDMobZCxwzk2nipIoB4%3D; uc1=cookie16=V32FPkk%2FxXMk5UvIbNtImtMfJQ%3D%3D&cookie21=W5iHLLyFeYZ1WM9hVnmS&cookie15=VFC%2FuZ9ayeYq2g%3D%3D&existShop=false&pas=0&cookie14=UoTaEcfFG6o%2BXQ%3D%3D&tag=8&lng=zh_CN; isg=BJmZudLmIId4X_zwzCi5TqgmqIVzJo3Ymatt-LtOIEA5wrlUA3adqAfQwIa0-iUQ; l=cBSbiUkPqHNT9TbyBOCanurza77OSIRYYuPzaNbMi_5aw6Tsi6QOk6DxIF96VjWd9NTB4tm2-gv9-etkZ8--WOHgcGAN."
+            #审查元素——搜索sw.js
 
-        #cookie的处理部分
+            #cookie的处理部分
 
-        cookies = {}
-        #服务器要求cookies是字典类型
-        #以下是处理cookies文本
-        for a in usercookies.split(';'):#以“；”作为划分切割文本
-            name,value=a.strip().split('=',1)#split方法可以将等号两遍的字符分割，strip方法可以去除字符串中多余的空格
-            cookies[name]=value
-        try:
-            r = requests.get(url,cookies=cookies,headers=kv,timeout = 30)#request.get方法可以允许携带头文件和cookie访问
-            r.raise_for_status
-            r.encoding = r.apparent_encoding
-            return r.text
-        except:
-            return False
-
-    def editData(plist,html):
-        try:
-            prt = re.findall(r'"view_price":"\d*\.\d{2}"',html)#正则表达式
-            nmt = re.findall(r'"raw_title":".*?"',html)
-            for i in range(len(prt)):
-                prize = prt[i].split(':')[1].strip("\" ")
-                itname = nmt[i].split(':')[1].strip("\"")
-                plist.append([prize,itname])
-        except:
-            return False
-    def printOut(plist):
-        tplt = '{:8}\t{:16}\t'
-        print(tplt.format("价格","商品名"))
-        for j in plist:
-            print(tplt.format(j[0],j[1]))
-
-    def main():
-        turl = "https://s.taobao.com/search?q="
-        item = input("请输入你想搜索的物品：")
-        depth = input("请输入你想搜索的深度：")
-        depth = int(depth)
-        cnt = []
-        for i in range(depth):
+            cookies = {}
+            #服务器要求cookies是字典类型
+            #以下是处理cookies文本
+            for a in usercookies.split(';'):#以“；”作为划分切割文本
+                name,value=a.strip().split('=',1)#split方法可以将等号两遍的字符分割，strip方法可以去除字符串中多余的空格
+                cookies[name]=value
             try:
-                url = turl + item + "&s=" + str(44*i)
-                html = getHTML(url)
-                editData(cnt,html)
+                r = requests.get(url,cookies=cookies,headers=kv,timeout = 30)#request.get方法可以允许携带头文件和cookie访问
+                r.raise_for_status
+                r.encoding = r.apparent_encoding
+                return r.text
             except:
-                continue
-        printOut(cnt)
+                return False
 
-    main()
+        def editData(plist,html):
+            try:
+                prt = re.findall(r'"view_price":"\d*\.\d{2}"',html)#正则表达式
+                nmt = re.findall(r'"raw_title":".*?"',html)
+                for i in range(len(prt)):
+                    prize = prt[i].split(':')[1].strip("\" ")
+                    itname = nmt[i].split(':')[1].strip("\"")
+                    plist.append([prize,itname])
+            except:
+                return False
+        def printOut(plist):
+            tplt = '{:8}\t{:16}\t'
+            print(tplt.format("价格","商品名"))
+            for j in plist:
+                print(tplt.format(j[0],j[1]))
 
-    ```
+        def main():
+            turl = "https://s.taobao.com/search?q="
+            item = input("请输入你想搜索的物品：")
+            depth = input("请输入你想搜索的深度：")
+            depth = int(depth)
+            cnt = []
+            for i in range(depth):
+                try:
+                    url = turl + item + "&s=" + str(44*i)
+                    html = getHTML(url)
+                    editData(cnt,html)
+                except:
+                    continue
+            printOut(cnt)
+
+        main()
+
+        ```
 
 ### 4.2对字符串对象的split方法
 
@@ -543,6 +570,7 @@ PYANBNCNDN
     ***num*** -- 分割次数。默认为 **-1**, 即分隔所有。
 
 4. 返回值
+
     返回分割后的字符串**列表**。
 
 5. 实例
@@ -606,7 +634,6 @@ PYANBNCNDN
     ```
 
     以 `/` 进行分隔：
-
     ```python
     ['http:', '', 'www.baidu.com', 'python', 'image', '123456.jpg']
     ```
@@ -622,5 +649,10 @@ PYANBNCNDN
     ```python
     '123456.jpg'
     ```
+
+## 5.Scrapy爬虫的使用
+
+### 5.1
+
 
 
