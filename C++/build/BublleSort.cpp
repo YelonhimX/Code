@@ -1,3 +1,4 @@
+//最简单的冒泡排序
 #include <iostream>
 #include <stdio.h>
 using namespace std;
@@ -5,6 +6,7 @@ int main()
 {
     int abc[10];
     cout<<"Hello"<<endl;
+    
     for(int i = 1;i<=5;i++)
     {
         cin>>abc[i];
