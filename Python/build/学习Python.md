@@ -1,0 +1,421 @@
+
+# 学习Python爬虫
+<!-- TOC -->
+
+- [学习Python爬虫](#学习python爬虫)
+    - [1. Requests库使用](#1-requests库使用)
+        - [1.1. 安装requests库](#11-安装requests库)
+        - [1.2. 抓取工具的基本代码格式](#12-抓取工具的基本代码格式)
+        - [1.3. Requests.request()方法的参数](#13-requestsrequest方法的参数)
+        - [1.4. 对于亚马逊等网站审查的应对办法](#14-对于亚马逊等网站审查的应对办法)
+        - [1.5. 添加关键词抓取](#15-添加关键词抓取)
+        - [1.6. 网络图片的抓取和存储](#16-网络图片的抓取和存储)
+    - [2. BeautifulSoup的使用](#2-beautifulsoup的使用)
+        - [2.1. BeautifulSoup的安装](#21-beautifulsoup的安装)
+        - [2.2. Suop对象的使用方法](#22-suop对象的使用方法)
+        - [2.3. 使用bs4对爬取的Html信息进行优化](#23-使用bs4对爬取的html信息进行优化)
+        - [2.4. 爬取中国大学排行代码实例](#24-爬取中国大学排行代码实例)
+    - [3. 正则表达式和爬虫进阶](#3-正则表达式和爬虫进阶)
+        - [3.1. 正则表达式导学](#31-正则表达式导学)
+        - [3.2. 正则表达式语法](#32-正则表达式语法)
+        - [3.3. Re库使用](#33-re库使用)
+        - [3.4. re库中的match对象](#34-re库中的match对象)
+        - [3.5. Match库的贪婪匹配和最小匹配](#35-match库的贪婪匹配和最小匹配)
+
+<!-- /TOC -->
+
+- 本文按网易公开课[Python网络爬虫与信息提取](http://www.icourse163.org/course/BIT-1001870001?tid=1206951268)整理。
+
+## 1. Requests库使用
+
+### 1.1. 安装requests库
+以管理员模式运行`cmd`，输入命令：
+```
+pip install requests
+```
+等待即可完成安装。
+### 1.2. 抓取工具的基本代码格式
+
+```python
+import requests
+url = "这里输入你要爬取的网址"
+try:
+    r = requests.get(url)               # get方法爬取
+    r.raise_for_status()                # 测验连接是否成功
+    r.encoding = r.apparent_encoding    # 转换合适的编码
+    print(r.text[:1000])                # 打印爬取结果
+except:                                 # 如果出现异常
+    print("抓取失败")
+```
+
+### 1.3. Requests.request()方法的参数
+
+* **request.get**(**url**, **params = None**, **\*\*kwag**)
+
+    |参数名|作用|
+    |:---:|:---:|
+    |url|拟获取页面的url链接|
+    |params|url中的额外参数，字典或字节流格式，可选|
+    |**kwargs|12个控制访问的参数|
+
+* **requests.request**(**method**, **url**, **\*\*kwargs**)
+
+    |参数名|作用|
+    |:---:|:---:|
+    |method|请求方式，对应get、put、post等7种|
+    |url|拟获取页面的url链接|
+    |**kwargs|13个控制访问的参数|
+
+    - **kwargs：控制访问的参数，均为可选项
+
+        * params：字典或字节序列，作为参数增加到url中
+
+            ```python
+            url = "http://www.example.com/"
+            kv = {'key1':'value1','key2':'value2'}
+            r = requests.request('POST',url,params = kv) #等于requests.post(url,params = kv)
+            ```
+            此时url为：
+            ```
+            http://www.example.com/?key1=value1&key2=value2
+            ```
+
+        * data：字典、字节序列或文件对象，作为Request的内容
+            ```python
+            body = 'main content'
+            requests.request('POST','url',data = body)
+            ```
+
+        * json：JSON格式的数据，作为request的内容
+
+        * headers：字典类型，HTTP定制头，可以进行post和get等操作
+
+        * cookies：字典或`CoolieJar`，request中的cookie
+
+        * auth：元祖类型，支持HTTP认证功能
+
+        * files：字典类型，传输文件
+            ```python
+            fs = {'file':open('data.xls','rb')}
+            r = requests.request('POST',url,files = fs)
+            ```
+
+        * timeout：设定超时时间，秒为单位
+            ```python
+            r = requests.request('GET',url,timeout = 10)
+
+        * proxies：字典类型，设定访问代理服务器，可以增加登录认证
+            ```python
+            pxs = {'http':'proxy1'
+                    'https':'proxy2'}
+            r = requests.request('GET',url,proxies = pxs)    
+        
+        * allow_redirects：True/False，默认为True，重定向开关
+
+        * stream：T/F,默认为True，获取内容立即下载开关
+
+        * verify：T/F，默认为True，认证SSL证书开关
+
+        * cert：本地SSL证书路径
+
+### 1.4. 对于亚马逊等网站审查的应对办法
+亚马逊等网站通过对`User_Agent`的审查来限制网络爬虫的访问，这时，需要对访问的头文件信息进行修改，伪装成浏览器对网站服务器进行访问。
+
+构造一个键值对：
+```python
+kv = {'User_Agent' : 'Mozilla/5.0'}
+```
+在使用`requests.get`函数时，加入如下参数：
+```python = requests.get("网址", headers = kv)
+```
+便可正常抓取页面内容。
+### 1.5. 添加关键词抓取
+例如百度、360等搜索引擎，抓取添加关键词进行搜索后的信息，用到向网页添加内容的`params`参数。
+
+以要搜索`python`为例，
+
+构造键值对：
+```python
+kv = {'wd':'python' }
+#`wd`为搜索引擎关键词索引目录，不同搜索引擎各不相同，这里以百度为例
+```
+在`get`函数中加入参数`params`
+```python
+r = requests.get(url, params = kv)
+```
+获取返回结果长度可以用函数
+```python
+len(r.text)
+```
+### 1.6. 网络图片的抓取和存储
+完整代码框架如下：
+```python
+import requests
+import os #这里需要额外引入一个os读写库
+url  = "www.example.com/xxx.jpg"
+root = "D://pics//"#存放图片的地址
+path = root + url.split('/')[-1]#路径为根目录//爬取连接的最后一个反斜杠后内                                  容
+try:
+    if not os.path.exists(root):#如果根目录不存在
+        os.mkdir(root)#创建根目录
+    if not os.path.exists(path):#如果图片不存在
+        r = requests.get(url)#爬取信息
+        with open(path,'wb') as f:#用with open将二进制数据转写到图片中
+            f.write(r.content)#将图片的二进制内容刻录到图片中
+            
+            print("文件保存成功")
+    else:
+        print("文件已存在")
+except:
+    print("爬取失败")
+```
+## 2. BeautifulSoup的使用
+
+### 2.1. BeautifulSoup的安装
+`cmd`中输入指令：
+```
+pip install beautifulsoup4
+```
+即可安装。
+
+### 2.2. Suop对象的使用方法
+* <>.find_all(name,attrs,recursive,string,**kwarg)
+    - name:对标签名称的检索字符串
+    - attrs:对标签属性值的检索字符串，可标注属性检索
+    - recursive:是否对子孙全部检索，默认为True
+    - string:<>...</>中字符串区域的检索字符串
+
+### 2.3. 使用bs4对爬取的Html信息进行优化
+首先从`bs4`库中引用`BeautifulSoup`类
+```python
+from bs4 import BeautifulSoup
+```
+随后
+```python
+from bs4 import BeautifulSoup
+import requests
+r = requests.get("http://python123.io/ws/demo.html")#get函数爬取网页数据
+demo = r.text#将爬取到的数据赋值到demo
+soup = BeautifulSoup(demo,"html.parser")#使用BeautifulSoup函数，后面的html.parser是Html编译器
+print(soup.prettify())#调用soup类中的属性将html文本美化
+```
+
+### 2.4. 爬取中国大学排行代码实例
+```python
+import requests
+import bs4
+from bs4 import BeautifulSoup
+import re
+'''
+模块化编程，编程前先构思程序结构，需要一个爬取数据的函数getHTML()，需要一个将爬取的数据筛选并存放的函数putINList(),
+需要一个输出函数printOut()。
+
+'''
+def getHTML(url):
+    try:
+        r = requests.get(url,timeout = 30)
+        r.raise_for_status()
+        r.encoding = r.apparent_encoding
+        return r.text
+    except:
+        return " "
+       
+def putINList(ulist, html):
+    soup = BeautifulSoup(html , "html.parser")
+    for tr in soup.find('tbody').children:#这里soup.find()函数是搜索Html内容里所有tbody标签下的子标签
+        if isinstance(tr,bs4.element.Tag):
+            tds = tr('td')
+            ulist.append([tds[0].string,tds[1].string,tds[2].string])#对list使用list.append插入元素
+'''
+    for i in soup.find_all(True):
+        print(i.name)               #这段是通过soup.find_all函数查找网页源代码中所有标签并输出
+'''
+
+def printOut(ulist,num):
+    tplt = "{0:^10}\t{1:{3}^10}\t{2:^10}"#使用format格式化输出，正则表达式限定格式
+    print(tplt.format("排名","学校名称","省市",chr(12288)))
+    for i in range(num):
+        u = ulist[i]
+        print(tplt.format(u[0],u[1],u[2],chr(12288)))     
+def main():
+
+    uinfo = []
+    num = input()
+    url = "http://www.zuihaodaxue.com/zuihaodaxuepaiming2019.html"
+    html =getHTML(url)
+    putINList(uinfo,html)
+    printOut(uinfo,int(num))
+main()
+```
+## 3. 正则表达式和爬虫进阶
+
+### 3.1. 正则表达式导学
+`正则表达式`(Regular Expression、Regex、RE)，是用来简介表达一组字符串的表达式。
+```RE
+'PN'
+'PYN'
+'PYTN'                  =               P(Y|YT|YTH|YTHO)?N
+'PYTHN'
+'PYTHON'
+```
+- 通用的字符串表达框架
+
+- 简洁表达一组字符串的表达式
+
+- 针对字符串表达“简洁”和“特征”思想的工具
+
+- 用在数据信息处理的字符串匹配中
+
+需要用代码
+```python
+p = re.comile(regex)
+```
+编译，即将符合正则表达式语法的字符串转换成正则表达式特征。
+
+### 3.2. 正则表达式语法
+>参看
+https://www.jb51.net/tools/zhengze.html
+
+### 3.3. Re库使用
+* Python使用`raw string`类型表达正则表达式，即原生字符串类型。
+例如：
+
+```python
+r'text'
+```
+* `string`类型，将`\`理解为转义符，表达更为繁琐。
+
+|函数|说明|
+|:---:|:---:|
+|re.search()|在一个字符串中搜索匹配正则表达式的第一个位置，返回match对象|
+|re.match()|从一个字符串的开始位置起匹配正则表达式，返回match对象|
+|re.findall()|搜索字符串，以列表类型返回全部能匹配的子串|
+|re.split()|讲一个字符串按照正则表达式匹配结果进行分割，返回列表类型|
+|re.finditer()|搜索字符串，返回一个匹配结果的迭代类型，每个迭代元素是match对象|
+|re.sub()|在一个字符串中替换所有匹配正则表达式的子串，返回替换后的字符串|
+
+1. re.search(**pattern**,**string**,**flags** = 0)
+
+    * 在一个字符串中搜索匹配正则表达式的第一个位置，返回match对象。
+
+        - **pattern**：正则表达式的字符串或原生字符串表示
+
+        - **string**：带匹配字符串
+
+        - **flags** :使用时的控制标记
+
+            |常用标记|说明|
+            |:---:|:---:|
+            |re.I re.IGNORECASE|忽略正则表达式的大小写，[A-Z]能够匹配小写字符|
+            |re.M re.MULTLINE|正则表达式中的`^`操作符能够将给定字符串的每行当做匹配开始|
+            |re.S re.DOTALL|正则表达式中的.操作符能够匹配所有字符，默认匹配除换行外的所有字符|
+2. re.match(**pattern**,**string**,**flags = 0**)
+
+3. re.findall(**pattern**,**string**,**flags = 0**)
+
+4. re.split(**pattern**,**string**,**maxsplit = 0**,**flags = 0**)
+    * maxsplit是最大分割数，剩余部分作为一个整体最后输出出来
+        ```python
+        import re
+
+        ls = re.split(r'[1-9]\d{5}','TSU100081 100084BIT ',maxsplit=1):
+            print(ls)
+        ```
+        输出
+        ```
+        ['TSU', ' 100084BIT '] 
+        ```
+        即将匹配到的第一个部分剩余的字符切割出来，而后面的部分作为一个整体输出   
+
+5. re.finditer
+
+    ```python
+    import re
+
+    for m in re.finditer(r'[1-9]\d{5}','TSU100081 100084BIT '):
+        print(m.group(0))
+        
+    ```
+    输出
+
+    ```
+    10081
+    10084
+    ```
+
+6. re.sub(**pattern**，**repl**,**string**, **count = 0**, **flags=0**)
+    * 用新的字符串替换原有正则表达式中的字符串之后返回一个新字符串
+        - repl：替换匹配字符串的字符串
+        - count: 匹配的最大替换次数
+
+        例如：
+
+        ```python
+        import re
+
+        l = re.sub(r'[1-9]\d{5}',' :zipcode', 'BIT100084 TSU100084')
+        print(l)
+        ```
+
+        输出
+        ```
+        BIT :zipcode TSU :zipcode
+        ```
+7. re库的等价用法
+
+```python
+import re
+pat = re.compile(r'[1-9]\d{5}')  
+rst = pat.search('BIT 100081')
+#面向对象用法，进行编译以后可以多次操作  
+```
+* regex = re.compile(**pattern**, **flags = 0**)
+    - 将正则表达式的字符串形势编译成正则表达式对象
+    - 用法和re库一致
+
+### 3.4. re库中的match对象
+
+1. Match对象的属性
+
+    |属性|说明|
+    |:---:|:---:|
+    |.string|待匹配的文本|
+    |.re|匹配是使用的pattern对象（正则表达式）|
+    |.pos|正则表达式搜索文本的开始位置|
+    |.endpos|结束位置|
+
+2. Match对象的方法
+
+    |方法|说明|
+    |:---:|:---:|
+    |.group()|获得匹配后的字符串|
+    |.start()|匹配字符串原始字符串的开始位置|
+    |.end()|匹配字符串内原始字符串的结束位置|
+    |.span()|返回元组类型(.start(),.end())|
+
+### 3.5. Match库的贪婪匹配和最小匹配
+
+1. Re库默认采用贪婪匹配，即输出匹配最长的子串
+```python
+match = re.search(r'PY.*N','PYANBNCNDN')
+match.group(0)
+```
+输出
+```
+PYANBNCNDN
+```
+
+2. 如果要得到最小匹配，则需要最小匹配操作符
+
+    |操作符|说明|
+    |:---:|:---:|
+    |*?|前一个字符0次或无限次扩展，最小匹配|
+    |+?|前一个字符1次或无限次扩展，最小匹配|
+    |??|前一个字符0次或1次扩展|
+    |{m,n}?|扩展前一个字符m至n次(含n)，最小匹配|
+
+
+
+
+
+
