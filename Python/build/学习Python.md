@@ -587,5 +587,40 @@ main()
     ['Google', 'Runoob#Taobao#Facebook']
     ```
 
+6. 笔记
+
+    URL 简单分割:
+
+    ```python
+    #!/usr/bin/python3
+    url = "http://www.baidu.com/python/image/123456.jpg"
+    #以“.” 进行分隔
+    path =url.split(".")
+    print(path)
+    ```
+
+    以上输出结果：我们在学习 python 爬虫的时候例如需要保存图片，图片名称的获取，可以依照下列方法：
+
+    ```python
+    ['http://www', 'baidu', 'com/python/image/123456', 'jpg']
+    ```
+
+    以 `/` 进行分隔：
+
+    ```python
+    ['http:', '', 'www.baidu.com', 'python', 'image', '123456.jpg']
+    ```
+
+    我们在学习 python 爬虫的时候例如需要保存图片，图片名称的获取，可以依照下列方法：
+
+    ```python
+    path =url.split("/")[-1]
+    ```
+
+    输出结果：
+
+    ```python
+    '123456.jpg'
+    ```
 
 
