@@ -1,24 +1,33 @@
 #include <iostream>
 #include <stdio.h>
 using namespace std;
-int main()
+#define MAXN 100000
+int Bubble(int arr[],int m)
 {
-    int abc[10];
-    cout<<"Hello"<<endl;
-    for(int i = 1;i<=5;i++)
+    for(int j = 1;j<=m;j++)
     {
-        cin>>abc[i];
-    }
-    for(int j = 1;j<=5;j++)
-    {
-        for (int k = 1; k <5; k++)
+        for (int k = 1; k <m; k++)
         {
-         if(abc[k]<=abc[k+1])
+         if(arr[k]<=arr[k+1])
          {
-             swap(abc[k],abc[k+1]);
+             swap(arr[k],arr[k+1]);
          }  /* code */
         }
         
+    }
+
+}
+int main()
+{
+    int abc[MAXN];
+    int n;
+    cout<<"Hello"<<endl;
+    cout<<"请输入排序数目"<<endl;
+    cin>>n;
+    cout<<"请输入数"<<endl;
+    for(int i = 1;i<=5;i++)
+    {
+        cin>>abc[i];
     }
     for(int l = 1;l<=5;l++)
     {
