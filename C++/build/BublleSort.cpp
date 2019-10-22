@@ -29,6 +29,7 @@ int main()
     {
         cin>>abc[i];
     }
+    Bubble(abc,n);
     for(int l = 1;l<=5;l++)
     {
         cout<<abc[l]<<" ";
