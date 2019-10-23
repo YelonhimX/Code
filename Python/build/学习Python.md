@@ -854,7 +854,7 @@ PYANBNCNDN
                 with open(fname,'wb')as f:
                     f.write(response.body)
                 self.log('Saved file %s.' % name)#将网页内容爬取下来并保存为HTML文件
-                
+
         ```
 
     4. 运行爬虫，获取网页
