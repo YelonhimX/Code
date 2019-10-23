@@ -1,37 +1,33 @@
 
 # 学习Python爬虫
-<!-- TOC -->
 
-- [学习Python爬虫](#学习python爬虫)
-    - [1. Requests库使用](#1-requests库使用)
-        - [1.1. 安装requests库](#11-安装requests库)
-        - [1.2. 抓取工具的基本代码格式](#12-抓取工具的基本代码格式)
-        - [1.3. Requests.request()方法的参数](#13-requestsrequest方法的参数)
-        - [1.4. 对于亚马逊等网站审查的应对办法](#14-对于亚马逊等网站审查的应对办法)
-        - [1.5. 添加关键词抓取](#15-添加关键词抓取)
-        - [1.6. 网络图片的抓取和存储](#16-网络图片的抓取和存储)
-    - [2. BeautifulSoup的使用](#2-beautifulsoup的使用)
-        - [2.1. BeautifulSoup的安装](#21-beautifulsoup的安装)
-        - [2.2. Suop对象的使用方法](#22-suop对象的使用方法)
-        - [2.3. 使用bs4对爬取的Html信息进行优化](#23-使用bs4对爬取的html信息进行优化)
-        - [2.4. 爬取中国大学排行代码实例](#24-爬取中国大学排行代码实例)
-    - [3. 正则表达式和爬虫进阶](#3-正则表达式和爬虫进阶)
-        - [3.1. 正则表达式导学](#31-正则表达式导学)
-        - [3.2. 正则表达式语法](#32-正则表达式语法)
-        - [3.3. Re库使用](#33-re库使用)
-        - [3.4. re库中的match对象](#34-re库中的match对象)
-        - [3.5. Match库的贪婪匹配和最小匹配](#35-match库的贪婪匹配和最小匹配)
-    - [4.应用实例————爬取淘宝网商品信息](#4应用实例爬取淘宝网商品信息)
-        - [4.1代码示例](#41代码示例)
-        - [4.2对字符串对象的split方法](#42对字符串对象的split方法)
-    - [5.Scrapy爬虫的概念介绍](#5scrapy爬虫的概念介绍)
-        - [5.1 Scrapy的安装和框架结构](#51-scrapy的安装和框架结构)
-        - [5.2 Requests库和Scrapy框架的对比](#52-requests库和scrapy框架的对比)
-        - [5.3 Scrapy爬虫的常用命令](#53-scrapy爬虫的常用命令)
-        - [5.4 Scrapy爬虫的第一个实例](#54-scrapy爬虫的第一个实例)
-
-<!-- /TOC -->
-- 本文主要内容依照网易公开课[Python网络爬虫与信息提取](http://www.icourse163.org/course/BIT-1001870001?tid=1206951268)整理，部分内容参考CSDN等网站上的文章。
+- [学习Python爬虫](#%e5%ad%a6%e4%b9%a0python%e7%88%ac%e8%99%ab)
+  - [1. Requests库使用](#1-requests%e5%ba%93%e4%bd%bf%e7%94%a8)
+    - [1.1. 安装requests库](#11-%e5%ae%89%e8%a3%85requests%e5%ba%93)
+    - [1.2. 抓取工具的基本代码格式](#12-%e6%8a%93%e5%8f%96%e5%b7%a5%e5%85%b7%e7%9a%84%e5%9f%ba%e6%9c%ac%e4%bb%a3%e7%a0%81%e6%a0%bc%e5%bc%8f)
+    - [1.3. Requests.request()方法的参数](#13-requestsrequest%e6%96%b9%e6%b3%95%e7%9a%84%e5%8f%82%e6%95%b0)
+    - [1.4. 对于亚马逊等网站审查的应对办法](#14-%e5%af%b9%e4%ba%8e%e4%ba%9a%e9%a9%ac%e9%80%8a%e7%ad%89%e7%bd%91%e7%ab%99%e5%ae%a1%e6%9f%a5%e7%9a%84%e5%ba%94%e5%af%b9%e5%8a%9e%e6%b3%95)
+    - [1.5. 添加关键词抓取](#15-%e6%b7%bb%e5%8a%a0%e5%85%b3%e9%94%ae%e8%af%8d%e6%8a%93%e5%8f%96)
+    - [1.6. 网络图片的抓取和存储](#16-%e7%bd%91%e7%bb%9c%e5%9b%be%e7%89%87%e7%9a%84%e6%8a%93%e5%8f%96%e5%92%8c%e5%ad%98%e5%82%a8)
+  - [2. BeautifulSoup的使用](#2-beautifulsoup%e7%9a%84%e4%bd%bf%e7%94%a8)
+    - [2.1. BeautifulSoup的安装](#21-beautifulsoup%e7%9a%84%e5%ae%89%e8%a3%85)
+    - [2.2. Suop对象的使用方法](#22-suop%e5%af%b9%e8%b1%a1%e7%9a%84%e4%bd%bf%e7%94%a8%e6%96%b9%e6%b3%95)
+    - [2.3. 使用bs4对爬取的Html信息进行优化](#23-%e4%bd%bf%e7%94%a8bs4%e5%af%b9%e7%88%ac%e5%8f%96%e7%9a%84html%e4%bf%a1%e6%81%af%e8%bf%9b%e8%a1%8c%e4%bc%98%e5%8c%96)
+    - [2.4. 爬取中国大学排行代码实例](#24-%e7%88%ac%e5%8f%96%e4%b8%ad%e5%9b%bd%e5%a4%a7%e5%ad%a6%e6%8e%92%e8%a1%8c%e4%bb%a3%e7%a0%81%e5%ae%9e%e4%be%8b)
+  - [3. 正则表达式和爬虫进阶](#3-%e6%ad%a3%e5%88%99%e8%a1%a8%e8%be%be%e5%bc%8f%e5%92%8c%e7%88%ac%e8%99%ab%e8%bf%9b%e9%98%b6)
+    - [3.1. 正则表达式导学](#31-%e6%ad%a3%e5%88%99%e8%a1%a8%e8%be%be%e5%bc%8f%e5%af%bc%e5%ad%a6)
+    - [3.2. 正则表达式语法](#32-%e6%ad%a3%e5%88%99%e8%a1%a8%e8%be%be%e5%bc%8f%e8%af%ad%e6%b3%95)
+    - [3.3. Re库使用](#33-re%e5%ba%93%e4%bd%bf%e7%94%a8)
+    - [3.4. re库中的match对象](#34-re%e5%ba%93%e4%b8%ad%e7%9a%84match%e5%af%b9%e8%b1%a1)
+    - [3.5. Match库的贪婪匹配和最小匹配](#35-match%e5%ba%93%e7%9a%84%e8%b4%aa%e5%a9%aa%e5%8c%b9%e9%85%8d%e5%92%8c%e6%9c%80%e5%b0%8f%e5%8c%b9%e9%85%8d)
+  - [4. 应用实例————爬取淘宝网商品信息](#4-%e5%ba%94%e7%94%a8%e5%ae%9e%e4%be%8b%e7%88%ac%e5%8f%96%e6%b7%98%e5%ae%9d%e7%bd%91%e5%95%86%e5%93%81%e4%bf%a1%e6%81%af)
+    - [4.1. 代码示例](#41-%e4%bb%a3%e7%a0%81%e7%a4%ba%e4%be%8b)
+    - [4.2. 对字符串对象的split方法](#42-%e5%af%b9%e5%ad%97%e7%ac%a6%e4%b8%b2%e5%af%b9%e8%b1%a1%e7%9a%84split%e6%96%b9%e6%b3%95)
+  - [5. Scrapy爬虫的概念介绍](#5-scrapy%e7%88%ac%e8%99%ab%e7%9a%84%e6%a6%82%e5%bf%b5%e4%bb%8b%e7%bb%8d)
+    - [5.1. Scrapy的安装和框架结构](#51-scrapy%e7%9a%84%e5%ae%89%e8%a3%85%e5%92%8c%e6%a1%86%e6%9e%b6%e7%bb%93%e6%9e%84)
+    - [5.2. Requests库和Scrapy框架的对比](#52-requests%e5%ba%93%e5%92%8cscrapy%e6%a1%86%e6%9e%b6%e7%9a%84%e5%af%b9%e6%af%94)
+    - [5.3. Scrapy爬虫的常用命令](#53-scrapy%e7%88%ac%e8%99%ab%e7%9a%84%e5%b8%b8%e7%94%a8%e5%91%bd%e4%bb%a4)
+    - [5.4. Scrapy爬虫的第一个实例](#54-scrapy%e7%88%ac%e8%99%ab%e7%9a%84%e7%ac%ac%e4%b8%80%e4%b8%aa%e5%ae%9e%e4%be%8b)
 
 ## 1. Requests库使用
 
@@ -63,19 +59,19 @@ except:                                 # 如果出现异常
 
 - **request.get**(**url**, **params = None**, **\*\*kwag**)
 
-    |参数名|作用|
-    |:---:|:---:|
-    |url|拟获取页面的url链接|
-    |params|url中的额外参数，字典或字节流格式，可选|
-    |**kwargs|12个控制访问的参数|
+    |  参数名  |                  作用                   |
+    | :------: | :-------------------------------------: |
+    |   url    |           拟获取页面的url链接           |
+    |  params  | url中的额外参数，字典或字节流格式，可选 |
+    | **kwargs |           12个控制访问的参数            |
 
 - **requests.request**(**method**, **url**, **\*\*kwargs**)
 
-    |参数名|作用|
-    |:---:|:---:|
-    |method|请求方式，对应get、put、post等7种|
-    |url|拟获取页面的url链接|
-    |**kwargs|13个控制访问的参数|
+    |  参数名  |               作用                |
+    | :------: | :-------------------------------: |
+    |  method  | 请求方式，对应get、put、post等7种 |
+    |   url    |        拟获取页面的url链接        |
+    | **kwargs |        13个控制访问的参数         |
 
   - **kwargs：控制访问的参数，均为可选项
 
@@ -125,7 +121,7 @@ except:                                 # 如果出现异常
         ```python
         pxs = {'http':'proxy1'
                     'https':'proxy2'}
-        r = requests.request('GET',url,proxies = pxs)    
+        r = requests.request('GET',url,proxies = pxs)
 
     - allow_redirects：True/False，默认为True，重定向开关
 
@@ -219,10 +215,10 @@ pip install beautifulsoup4
 ### 2.2. Suop对象的使用方法
 
 - <>.find_all(name,attrs,recursive,string,**kwarg)
-    - name:对标签名称的检索字符串
-    - attrs:对标签属性值的检索字符串，可标注属性检索
-    - recursive:是否对子孙全部检索，默认为True
-    - string:<>...</>中字符串区域的检索字符串
+  - name:对标签名称的检索字符串
+  - attrs:对标签属性值的检索字符串，可标注属性检索
+  - recursive:是否对子孙全部检索，默认为True
+  - string:<>...</>中字符串区域的检索字符串
 
 ### 2.3. 使用bs4对爬取的Html信息进行优化
 
@@ -341,14 +337,14 @@ r'text'
 
 - `string`类型，将`\`理解为转义符，表达更为繁琐。
 
-|函数|说明|
-|:---:|:---:|
-|re.search()|在一个字符串中搜索匹配正则表达式的第一个位置，返回match对象|
-|re.match()|从一个字符串的开始位置起匹配正则表达式，返回match对象|
-|re.findall()|搜索字符串，以列表类型返回全部能匹配的子串|
-|re.split()|讲一个字符串按照正则表达式匹配结果进行分割，返回列表类型|
-|re.finditer()|搜索字符串，返回一个匹配结果的迭代类型，每个迭代元素是match对象|
-|re.sub()|在一个字符串中替换所有匹配正则表达式的子串，返回替换后的字符串|
+|     函数      |                              说明                               |
+| :-----------: | :-------------------------------------------------------------: |
+|  re.search()  |   在一个字符串中搜索匹配正则表达式的第一个位置，返回match对象   |
+|  re.match()   |      从一个字符串的开始位置起匹配正则表达式，返回match对象      |
+| re.findall()  |           搜索字符串，以列表类型返回全部能匹配的子串            |
+|  re.split()   |    讲一个字符串按照正则表达式匹配结果进行分割，返回列表类型     |
+| re.finditer() | 搜索字符串，返回一个匹配结果的迭代类型，每个迭代元素是match对象 |
+|   re.sub()    | 在一个字符串中替换所有匹配正则表达式的子串，返回替换后的字符串  |
 
 1. re.search(**pattern**,**string**,**flags*- = 0)
 
@@ -360,11 +356,11 @@ r'text'
 
         - **flags*- :使用时的控制标记
 
-            |常用标记|说明|
-            |:---:|:---:|
-            |re.I re.IGNORECASE|忽略正则表达式的大小写，[A-Z]能够匹配小写字符|
-            |re.M re.MULTLINE|正则表达式中的`^`操作符能够将给定字符串的每行当做匹配开始|
-            |re.S re.DOTALL|正则表达式中的.操作符能够匹配所有字符，默认匹配除换行外的所有字符|
+            |      常用标记      |                               说明                                |
+            | :----------------: | :---------------------------------------------------------------: |
+            | re.I re.IGNORECASE |           忽略正则表达式的大小写，[A-Z]能够匹配小写字符           |
+            |  re.M re.MULTLINE  |     正则表达式中的`^`操作符能够将给定字符串的每行当做匹配开始     |
+            |   re.S re.DOTALL   | 正则表达式中的.操作符能够匹配所有字符，默认匹配除换行外的所有字符 |
 2. re.match(**pattern**,**string**,**flags = 0**)
 
 3. re.findall(**pattern**,**string**,**flags = 0**)
@@ -386,7 +382,7 @@ r'text'
         ['TSU', ' 100084BIT ']
         ```
 
-        即将匹配到的第一个部分剩余的字符切割出来，而后面的部分作为一个整体输出   
+        即将匹配到的第一个部分剩余的字符切割出来，而后面的部分作为一个整体输出
 
 5. re.finditer
 
@@ -442,118 +438,118 @@ r'text'
 
 1. Match对象的属性
 
-    |属性|说明|
-    |:---:|:---:|
-    |.string|待匹配的文本|
-    |.re|匹配是使用的pattern对象（正则表达式）|
-    |.pos|正则表达式搜索文本的开始位置|
-    |.endpos|结束位置|
+    |  属性   |                 说明                  |
+    | :-----: | :-----------------------------------: |
+    | .string |             待匹配的文本              |
+    |   .re   | 匹配是使用的pattern对象（正则表达式） |
+    |  .pos   |     正则表达式搜索文本的开始位置      |
+    | .endpos |               结束位置                |
 
 2. Match对象的方法
 
-    |方法|说明|
-    |:---:|:---:|
-    |.group()|获得匹配后的字符串|
-    |.start()|匹配字符串原始字符串的开始位置|
-    |.end()|匹配字符串内原始字符串的结束位置|
-    |.span()|返回元组类型(.start(),.end())|
+    |   方法   |               说明               |
+    | :------: | :------------------------------: |
+    | .group() |        获得匹配后的字符串        |
+    | .start() |  匹配字符串原始字符串的开始位置  |
+    |  .end()  | 匹配字符串内原始字符串的结束位置 |
+    | .span()  |  返回元组类型(.start(),.end())   |
 
 ### 3.5. Match库的贪婪匹配和最小匹配
 
 1. Re库默认采用贪婪匹配，即输出匹配最长的子串
 
-```python
-match = re.search(r'PY.*N','PYANBNCNDN')
-match.group(0)
-```
+    ```python
+    match = re.search(r'PY.*N','PYANBNCNDN')
+    match.group(0)
+    ```
 
-输出
+    输出
 
-```markdown
-PYANBNCNDN
-```
+    ```markdown
+    PYANBNCNDN
+    ```
 
 2. 如果要得到最小匹配，则需要最小匹配操作符
 
-    |操作符|说明|
-    |:---:|:---:|
-    |*?|前一个字符0次或无限次扩展，最小匹配|
-    |+?|前一个字符1次或无限次扩展，最小匹配|
-    |??|前一个字符0次或1次扩展|
-    |{m,n}?|扩展前一个字符m至n次(含n)，最小匹配|
+    | 操作符 |                说明                 |
+    | :----: | :---------------------------------: |
+    |   *?   | 前一个字符0次或无限次扩展，最小匹配 |
+    |   +?   | 前一个字符1次或无限次扩展，最小匹配 |
+    |   ??   |       前一个字符0次或1次扩展        |
+    | {m,n}? | 扩展前一个字符m至n次(含n)，最小匹配 |
 
-## 4.应用实例————爬取淘宝网商品信息
+## 4. 应用实例————爬取淘宝网商品信息
 
-### 4.1代码示例
+### 4.1. 代码示例
 
-        ```python
+```python
 
-        import requests
-        import re
-        from bs4 import BeautifulSoup
-        import bs4
+import requests
+import re
+from bs4 import BeautifulSoup
+import bs4
 
-        def getHTML(url):
-            '''
-            需要注意的是，淘宝页面爬取需要登录cookies
-            以下12行到16行就是编辑cookies的过程
-            '''
-            kv = {'User_Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36'}
-            usercookies = "t=684edbb0ad3447a0b8309bde706ee296; cna=xWPyFVosrVcCAW8oxZC1M8XM; thw=cn; lgc=tb13289283; tracknick=tb13289283; tg=0; mt=ci=0_1; enc=GN0eYRLiSZPf1YYgGyb8Ggz3VzkPmCaiS%2FFLixhxJ%2BMZ8XOES758bNgiDgPK5iURfflbWCxng9xGCeAMKhGmBg%3D%3D; x=e%3D1%26p%3D*%26s%3D0%26c%3D0%26f%3D0%26g%3D0%26t%3D0%26__ll%3D-1%26_ato%3D0; v=0; cookie2=743b5aebbebb887827b23da274a82893; _tb_token_=9ba5e6b78753; unb=3365090684; uc3=id2=UNN79Hu46I5xQA%3D%3D&lg2=U%2BGCWk%2F75gdr5Q%3D%3D&nk2=F5REPQPr65EmWw%3D%3D&vt3=F8dByuHZ7kjZ2ravrg4%3D; csg=d34362a0; cookie17=UNN79Hu46I5xQA%3D%3D; dnk=tb13289283; skt=bb5f94bd37fe92dc; existShop=MTU2OTY5MzUyMQ%3D%3D; uc4=id4=0%40UgQz1yN%2FASfQtG9PoxEcMkmAUfGB&nk4=0%40FY4Pb2hzCHoyQ4FwG2dj1LPTn%2BuX; _cc_=V32FPkk%2Fhw%3D%3D; _l_g_=Ug%3D%3D; sg=34b; _nk_=tb13289283; cookie1=BxUMWqCyesrnB24sCMMgaPAcJDMobZCxwzk2nipIoB4%3D; uc1=cookie16=V32FPkk%2FxXMk5UvIbNtImtMfJQ%3D%3D&cookie21=W5iHLLyFeYZ1WM9hVnmS&cookie15=VFC%2FuZ9ayeYq2g%3D%3D&existShop=false&pas=0&cookie14=UoTaEcfFG6o%2BXQ%3D%3D&tag=8&lng=zh_CN; isg=BJmZudLmIId4X_zwzCi5TqgmqIVzJo3Ymatt-LtOIEA5wrlUA3adqAfQwIa0-iUQ; l=cBSbiUkPqHNT9TbyBOCanurza77OSIRYYuPzaNbMi_5aw6Tsi6QOk6DxIF96VjWd9NTB4tm2-gv9-etkZ8--WOHgcGAN."
-            #审查元素——搜索sw.js
+def getHTML(url):
+    '''
+    需要注意的是，淘宝页面爬取需要登录cookies
+    以下12行到16行就是编辑cookies的过程
+    '''
+    kv = {'User_Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36'}
+    usercookies = "t=684edbb0ad3447a0b8309bde706ee296; cna=xWPyFVosrVcCAW8oxZC1M8XM; thw=cn; lgc=tb13289283; tracknick=tb13289283; tg=0; mt=ci=0_1; enc=GN0eYRLiSZPf1YYgGyb8Ggz3VzkPmCaiS%2FFLixhxJ%2BMZ8XOES758bNgiDgPK5iURfflbWCxng9xGCeAMKhGmBg%3D%3D; x=e%3D1%26p%3D*%26s%3D0%26c%3D0%26f%3D0%26g%3D0%26t%3D0%26__ll%3D-1%26_ato%3D0; v=0; cookie2=743b5aebbebb887827b23da274a82893; _tb_token_=9ba5e6b78753; unb=3365090684; uc3=id2=UNN79Hu46I5xQA%3D%3D&lg2=U%2BGCWk%2F75gdr5Q%3D%3D&nk2=F5REPQPr65EmWw%3D%3D&vt3=F8dByuHZ7kjZ2ravrg4%3D; csg=d34362a0; cookie17=UNN79Hu46I5xQA%3D%3D; dnk=tb13289283; skt=bb5f94bd37fe92dc; existShop=MTU2OTY5MzUyMQ%3D%3D; uc4=id4=0%40UgQz1yN%2FASfQtG9PoxEcMkmAUfGB&nk4=0%40FY4Pb2hzCHoyQ4FwG2dj1LPTn%2BuX; _cc_=V32FPkk%2Fhw%3D%3D; _l_g_=Ug%3D%3D; sg=34b; _nk_=tb13289283; cookie1=BxUMWqCyesrnB24sCMMgaPAcJDMobZCxwzk2nipIoB4%3D; uc1=cookie16=V32FPkk%2FxXMk5UvIbNtImtMfJQ%3D%3D&cookie21=W5iHLLyFeYZ1WM9hVnmS&cookie15=VFC%2FuZ9ayeYq2g%3D%3D&existShop=false&pas=0&cookie14=UoTaEcfFG6o%2BXQ%3D%3D&tag=8&lng=zh_CN; isg=BJmZudLmIId4X_zwzCi5TqgmqIVzJo3Ymatt-LtOIEA5wrlUA3adqAfQwIa0-iUQ; l=cBSbiUkPqHNT9TbyBOCanurza77OSIRYYuPzaNbMi_5aw6Tsi6QOk6DxIF96VjWd9NTB4tm2-gv9-etkZ8--WOHgcGAN."
+    #审查元素——搜索sw.js
 
-            #cookie的处理部分
+    #cookie的处理部分
 
-            cookies = {}
-            #服务器要求cookies是字典类型
-            #以下是处理cookies文本
-            for a in usercookies.split(';'):#以“；”作为划分切割文本
-                name,value=a.strip().split('=',1)#split方法可以将等号两遍的字符分割，strip方法可以去除字符串中多余的空格
-                cookies[name]=value
-            try:
-                r = requests.get(url,cookies=cookies,headers=kv,timeout = 30)#request.get方法可以允许携带头文件和cookie访问
-                r.raise_for_status
-                r.encoding = r.apparent_encoding
-                return r.text
-            except:
-                return False
+    cookies = {}
+    #服务器要求cookies是字典类型
+    #以下是处理cookies文本
+    for a in usercookies.split(';'):#以“；”作为划分切割文本
+        name,value=a.strip().split('=',1)#split方法可以将等号两遍的字符分割，strip方法可以去除字符串中多余的空格
+        cookies[name]=value
+    try:
+        r = requests.get(url,cookies=cookies,headers=kv,timeout = 30)#request.get方法可以允许携带头文件和cookie访问
+        r.raise_for_status
+        r.encoding = r.apparent_encoding
+        return r.text
+    except:
+        return False
 
-        def editData(plist,html):
-            try:
-                prt = re.findall(r'"view_price":"\d*\.\d{2}"',html)#正则表达式
-                nmt = re.findall(r'"raw_title":".*?"',html)
-                for i in range(len(prt)):
-                    prize = prt[i].split(':')[1].strip("\" ")
-                    itname = nmt[i].split(':')[1].strip("\"")
-                    plist.append([prize,itname])
-            except:
-                return False
-        def printOut(plist):
-            tplt = '{:8}\t{:16}\t'
-            print(tplt.format("价格","商品名"))
-            for j in plist:
-                print(tplt.format(j[0],j[1]))
+def editData(plist,html):
+    try:
+          prt = re.findall(r'"view_price":"\d*\.\d{2}"',html)#正则表达式
+          nmt = re.findall(r'"raw_title":".*?"',html)
+          for i in range(len(prt)):
+              prize = prt[i].split(':')[1].strip("\" ")
+              itname = nmt[i].split(':')[1].strip("\"")
+              plist.append([prize,itname])
+      except:
+          return False
+  def printOut(plist):
+      tplt = '{:8}\t{:16}\t'
+      print(tplt.format("价格","商品名"))
+      for j in plist:
+          print(tplt.format(j[0],j[1]))
 
-        def main():
-            turl = "https://s.taobao.com/search?q="
-            item = input("请输入你想搜索的物品：")
-            depth = input("请输入你想搜索的深度：")
-            depth = int(depth)
-            cnt = []
-            for i in range(depth):
-                try:
-                    url = turl + item + "&s=" + str(44*i)
-                    html = getHTML(url)
-                    editData(cnt,html)
-                except:
-                    continue
-            printOut(cnt)
+  def main():
+      turl = "https://s.taobao.com/search?q="
+      item = input("请输入你想搜索的物品：")
+      depth = input("请输入你想搜索的深度：")
+      depth = int(depth)
+      cnt = []
+      for i in range(depth):
+          try:
+              url = turl + item + "&s=" + str(44*i)
+              html = getHTML(url)
+              editData(cnt,html)
+          except:
+              continue
+      printOut(cnt)
 
-        main()
+  main()
 
-        ```
+  ```
 
-### 4.2对字符串对象的split方法
+### 4.2. 对字符串对象的split方法
 
 内容来源[runoob.com](https://www.runoob.com/python3/python3-string-split.html)。
 
@@ -656,9 +652,9 @@ PYANBNCNDN
     '123456.jpg'
     ```
 
-## 5.Scrapy爬虫的概念介绍
+## 5. Scrapy爬虫的概念介绍
 
-### 5.1 Scrapy的安装和框架结构
+### 5.1. Scrapy的安装和框架结构
 
 1. 安装
 
@@ -735,7 +731,7 @@ PYANBNCNDN
             - 第三条数据流：Spiders ——> Engine ——> Item Pipelines/Scheduler
                 - 经由Spiders处理后产生两个数据类型，一个是爬取项`Items`发送给Item Pipelines，另一个是新的爬取请求`requests`，发送给Sheduler进行调度
 
-### 5.2 Requests库和Scrapy框架的对比
+### 5.2. Requests库和Scrapy框架的对比
 
 1. 相同点：
 
@@ -745,14 +741,14 @@ PYANBNCNDN
 
 2. 区别
 
-    |**Requests**|**Scrapy**|
-    |:---:|:---:|
-    |页面级爬虫|网站级爬虫|
-    |功能库|框架|
-    |并发性考虑不足，性能较差|并发性好，性能较高|
-    |重点在于页面下载|重点在于爬虫结构|
-    |定制灵活|一般定制灵活，深度定制困难|
-    |上手十分简单|入门稍难|
+    |       **Requests**       |         **Scrapy**         |
+    | :----------------------: | :------------------------: |
+    |        页面级爬虫        |         网站级爬虫         |
+    |          功能库          |            框架            |
+    | 并发性考虑不足，性能较差 |     并发性好，性能较高     |
+    |     重点在于页面下载     |      重点在于爬虫结构      |
+    |         定制灵活         | 一般定制灵活，深度定制困难 |
+    |       上手十分简单       |          入门稍难          |
 
 3. 合理选择
 
@@ -760,7 +756,7 @@ PYANBNCNDN
     - 不太小的需求，Scrapy框架。
     - 定制程度很高的需求（不考虑规模），自搭框架，Requests > Scrapy。
 
-### 5.3 Scrapy爬虫的常用命令
+### 5.3. Scrapy爬虫的常用命令
 
 - Scrapy命令行
 
@@ -768,20 +764,20 @@ PYANBNCNDN
 
 - 格式
 
-    >scrapy<command>[options][args]
+    >scrapy\<command>[options][args]
 
     Scrapy具体命令在`command`区域体现
 
 - 常用命令
 
-    |**命令**|**说明**|**格式**|
-    |:---:|:---:|:---:|
-    |**startproject**|创建一个新工程|scrapy staratproject\<name> [dir]|
-    |**genspider**|创建一个爬虫|scrapy genspider [options] \<name>\<domain>|
-    |settings|获取爬虫配置信息|scrapy settings [options] |
-    |**crawl**|运行一个爬虫|scrapy crawl\<spider>|
-    |list|列出工程中所有爬虫|scrapy list|
-    |shell|启动URL调试命令行|scrapy shell [url]|
+    |     **命令**     |      **说明**      |                  **格式**                   |
+    | :--------------: | :----------------: | :-----------------------------------------: |
+    | **startproject** |   创建一个新工程   |      scrapy staratproject\<name> [dir]      |
+    |  **genspider**   |    创建一个爬虫    | scrapy genspider [options] \<name>\<domain> |
+    |     settings     |  获取爬虫配置信息  |          scrapy settings [options]          |
+    |    **crawl**     |    运行一个爬虫    |            scrapy crawl\<spider>            |
+    |       list       | 列出工程中所有爬虫 |                 scrapy list                 |
+    |      shell       | 启动URL调试命令行  |             scrapy shell [url]              |
 
 - Scrapy爬虫的命令行逻辑
 
@@ -789,7 +785,7 @@ PYANBNCNDN
 
   - 命令行更容易自动化，适合脚本控制
 
-### 5.4 Scrapy爬虫的第一个实例
+### 5.4. Scrapy爬虫的第一个实例
 
 - 产生步骤
 
