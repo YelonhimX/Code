@@ -673,6 +673,9 @@ PYANBNCNDN
 
     * Scrapy的`5+2`结构
 
+        ![结构图](https://raw.githubusercontent.com/YelonhimX/Code/master/Python/build/drawio_assets/graph.svg?sanitize=true)
+
+
       
 
 
