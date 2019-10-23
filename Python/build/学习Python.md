@@ -24,9 +24,11 @@
     - [4.应用实例————爬取淘宝网商品信息](#4应用实例爬取淘宝网商品信息)
         - [4.1代码示例](#41代码示例)
         - [4.2对字符串对象的split方法](#42对字符串对象的split方法)
-    - [5.Scrapy爬虫的使用](#5scrapy爬虫的使用)
+    - [5.Scrapy爬虫的概念介绍](#5scrapy爬虫的概念介绍)
         - [5.1 Scrapy的安装和框架结构](#51-scrapy的安装和框架结构)
         - [5.2 Requests库和Scrapy框架的对比](#52-requests库和scrapy框架的对比)
+        - [5.3 Scrapy爬虫的常用命令](#53-scrapy爬虫的常用命令)
+        - [5.4 Scrapy爬虫的第一个实例](#54-scrapy爬虫的第一个实例)
 
 <!-- /TOC -->
 - 本文主要内容依照网易公开课[Python网络爬虫与信息提取](http://www.icourse163.org/course/BIT-1001870001?tid=1206951268)整理，部分内容参考CSDN等网站上的文章。
@@ -652,7 +654,7 @@ PYANBNCNDN
     '123456.jpg'
     ```
 
-## 5.Scrapy爬虫的使用
+## 5.Scrapy爬虫的概念介绍
 
 ### 5.1 Scrapy的安装和框架结构
 
@@ -749,3 +751,114 @@ PYANBNCNDN
     |重点在于页面下载|重点在于爬虫结构|
     |定制灵活|一般定制灵活，深度定制困难|
     |上手十分简单|入门稍难|
+
+3. 合理选择
+
+    * 非常小的需求，Requests库。
+    * 不太小的需求，Scrapy框架。
+    * 定制程度很高的需求（不考虑规模），自搭框架，Requests > Scrapy。
+
+### 5.3 Scrapy爬虫的常用命令
+
+* Scrapy命令行
+
+    Scrapy是为持续运行设计的专业爬虫框架，提供操作的Scapy命令行
+
+* 格式
+
+    >scrapy<command>[options][args]
+
+    Scrapy具体命令在`command`区域体现
+
+* 常用命令
+
+    |**命令**|**说明**|**格式**|
+    |:---:|:---:|:---:|
+    |**startproject**|创建一个新工程|scrapy staratproject<name> [dir]|
+    |**genspider**|创建一个爬虫|scrapy genspider [options] <name><domain>|
+    |settings|获取爬虫配置信息|scrapy settings [options] |
+    |**crawl**|运行一个爬虫|scrapy crawl<spider>|
+    |list|列出工程中所有爬虫|scrapy list|
+    |shell|启动URL调试命令行|scrapy shell [url]|
+
+* Scrapy爬虫的命令行逻辑
+
+    为什么Scrapy采用命令行创建和运行爬虫?
+
+    * 命令行更容易自动化，适合脚本控制
+
+### 5.4 Scrapy爬虫的第一个实例
+
+* 产生步骤
+
+    1. 建立一个爬虫工程
+
+        在Cmd输入：
+
+        >scrapy startproject python123demo
+
+        * 生成的目录
+
+            - python123demo/ ------> 外层目录
+
+                - scrapy.cfg  ---------> **部署**Scrapy爬虫的配置文件
+                - python123demo -------> Scrapy框架的用户自定义Python代码
+
+                    - \_\_init\_\_.py -------> 初始化脚本
+                    - items.py    -------> Items代码模板（继承类）
+                    - middlewares.py-----> Middlewares
+                    代码模板（继承类）
+                    - pipelines.py ------> Pipelines代码模板（继承类）
+                    - settings.py  ------> Scrapy爬虫的配置文件
+                    - spiders/     ------> Speders代码模板目录（继承类）
+
+                        - \_\_init\_\_.py ---> 初始文件，无需修改
+                        - \_\_pycache\_\_/ --> 缓存目录，无需修改
+
+    2. 在工程中产生一个Scrapy爬虫
+
+        * 运行命令：
+
+        >scrapy genspider demo python123.io
+
+        此命令要求Scrapy生成一个`demo.py`的文件：
+
+        ```python
+        # -*- coding: utf-8 -*-
+        import scrapy
+
+
+        class DemoSpider(scrapy.Spider):#必须是继承自Spider的子类
+            name = 'demo'#一开始命名的名称
+            allowed_domains = ['python123.io']
+            start_urls = ['http://python123.io/']#所要爬取也免得初始页面
+
+            def parse(self, response):#解析页面的空方法，解析内容形成字典，产生新的url爬取内容
+                pass
+        ```
+
+    3. 配置产生的Spider爬虫
+
+        ```python
+        # -*- coding: utf-8 -*-
+        import scrapy
+
+
+        class DemoSpider(scrapy.Spider):
+            name = 'demo'
+            #allowed_domains = ['python123.io']
+            start_urls = ['http://python123.io/ws/demo.html']
+
+            def parse(self, response):
+                fname =response.url.split('/')[-1]
+                with open(fname,'wb')as f:
+                    f.write(response.body)
+                self.log('Saved file %s.' % name)#将网页内容爬取下来并保存为HTML文件
+                
+        ```
+
+    4. 运行爬虫，获取网页
+
+        * 打开命令行执行命令：
+            >scrapy crawl demo
+
