@@ -10,5 +10,7 @@ import scrapy
 
 class Python123DemoItem(scrapy.Item):
     # define the fields for your item here like:
-    # name = scrapy.Field()
+    name = scrapy.Field()
+    uid  = scrapy.Field()
+    
     pass
