@@ -26,6 +26,7 @@
         - [4.2对字符串对象的split方法](#42对字符串对象的split方法)
     - [5.Scrapy爬虫的使用](#5scrapy爬虫的使用)
         - [5.1 Scrapy的安装和框架结构](#51-scrapy的安装和框架结构)
+        - [5.2 Requests库和Scrapy框架的对比](#52-requests库和scrapy框架的对比)
 
 <!-- /TOC -->
 - 本文主要内容依照网易公开课[Python网络爬虫与信息提取](http://www.icourse163.org/course/BIT-1001870001?tid=1206951268)整理，部分内容参考CSDN等网站上的文章。
@@ -663,7 +664,7 @@ PYANBNCNDN
     pip install scrapy
     ```
 
-    * 注意Scrapy尽量在虚拟环境中安装，因为Scrapy需要的Python扩展可能不稳定。或者可以尝试下载`whl`文件手动安装。
+    * 注意Scrapy尽量在虚拟环境中安装，因为Scrapy依靠的Python扩展可能不稳定。或者可以尝试下载`whl`文件手动安装。
 
 2. Scrapy爬虫框架
 
@@ -675,9 +676,76 @@ PYANBNCNDN
 
         ![结构图](https://raw.githubusercontent.com/YelonhimX/Code/master/Python/build/drawio_assets/graph.svg?sanitize=true)
 
+        * 5个模块
 
-      
+            * Engine ——已有实现
 
+                - 控制所有模块之间的数据流
+                - 根据条件触发事件
 
+            * Spider ——入口，用户编写配置代码
 
+                - 解析Downloader返回的响应
+                - 产生爬取项
+                - 产生额外的爬取请求
 
+            * Downloader ——已有实现
+
+                - 根据请求下载网页
+                - 不需要用户修改
+
+            * Scheduler ——已有实现
+
+                - 对所有爬取请求进行调度管理
+
+            * Item Pipelines ——出口，用户编写配置代码
+
+                - 以流水线待处理Spiders产生的爬取项
+                - 由一组操作顺序组成，类似流水线，每个操作是一个Item Pipeline类型
+                - 可能操作包括：清理、检验和查重爬取项中的HTML数据、将数据存储到数据库
+
+        * 2个中间键模块
+
+            * Engine ———— Spiders：Spider Middlerware
+
+                **目的**：对请求和爬取项的再处理
+
+                **功能**：修改、丢弃、新增请求或爬取项
+
+                **用户可以配置编写**
+
+            * Engine ———— Downloader：Downloader Middleware
+
+                **目的**：实施Engine、Sheduler、Downloader之间进行用户可配置的控制
+
+                **功能**：修改、丢弃、新增请求或响应
+
+                **用户可以配置代码**
+
+        * 3条数据流
+
+            - 第一条数据流：Spider ——> Engine ——> Sheduler ——> Engine ——> Downloader
+                * Spiders产生requests请求，通过Engine模块发送给Sheduler进行调度，而后者将请求发送给Engine，经由中间键发送给Downloader
+            - 第二条数据流: Downloader ——> Engine ——> Spiders
+                * Downloader连接互联网爬取网页，形成`response`对象响应，通过中间键、Engine发送给Spiders
+            - 第三条数据流：Spiders ——> Engine ——> Item Pipelines/Scheduler
+                * 经由Spiders处理后产生两个数据类型，一个是爬取项`Items`发送给Item Pipelines，另一个是新的爬取请求`requests`，发送给Sheduler进行调度
+
+### 5.2 Requests库和Scrapy框架的对比
+
+1. 相同点：
+
+    * 两者都额可以进行页面请求和爬取，Python爬虫的两个重要技术路线。
+    * 两者可用性都好，文档丰富，入门简单。
+    * 两者都没有处理js、提交表单、应对验证码等功能（可扩展）。
+
+2. 区别
+
+    |**Requests**|**Scrapy**|
+    |:---:|:---:|
+    |页面级爬虫|网站级爬虫|
+    |功能库|框架|
+    |并发性考虑不足，性能较差|并发性好，性能较高|
+    |重点在于页面下载|重点在于爬虫结构|
+    |定制灵活|一般定制灵活，深度定制困难|
+    |上手十分简单|入门稍难|
