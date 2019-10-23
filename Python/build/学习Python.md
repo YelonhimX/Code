@@ -28,7 +28,7 @@
         - [5.1 Scrapy的安装和框架结构](#51-scrapy的安装和框架结构)
 
 <!-- /TOC -->
-- 本文按网易公开课[Python网络爬虫与信息提取](http://www.icourse163.org/course/BIT-1001870001?tid=1206951268)整理。
+- 本文主要内容依照网易公开课[Python网络爬虫与信息提取](http://www.icourse163.org/course/BIT-1001870001?tid=1206951268)整理，部分内容参考CSDN等网站上的文章。
 
 ## 1. Requests库使用
 
@@ -634,6 +634,7 @@ PYANBNCNDN
     ```
 
     以 `/` 进行分隔：
+
     ```python
     ['http:', '', 'www.baidu.com', 'python', 'image', '123456.jpg']
     ```
@@ -672,16 +673,7 @@ PYANBNCNDN
 
     * Scrapy的`5+2`结构
 
-        ```mermaid
-           graph TD;
-            A{ENGINE}-->B;
-            A-->C;
-            B-->D;
-            C-->D; 
-            D-->A;
-            A-->D;
-            
-        ```
+      
 
 
 

@@ -1,5 +1,6 @@
 {
     "python.pythonPath": "C:\\Python38\\python.exe",
-    "python.analysis.loglevel": "trace"
+    "python.analysis.loglevel": "trace",
+    "git.ignoreLimitWarning": true
 
 }
