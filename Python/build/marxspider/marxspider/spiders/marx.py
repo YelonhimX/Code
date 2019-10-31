@@ -19,7 +19,7 @@ class MarxSpider(scrapy.Spider):
             print(urls)
         #print(len(item["link"]))
         #调试用
-            #yield scrapy.Request(urls,callback=text_parse)
+            #yield scrapy.Request(urls,callback=self.text_parse)
             #回调函数，下一步爬取requests
     
     def text_parse(self, response):
