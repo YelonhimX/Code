@@ -29,6 +29,8 @@
     - [5.3. Scrapy爬虫的常用命令](#53-scrapy%e7%88%ac%e8%99%ab%e7%9a%84%e5%b8%b8%e7%94%a8%e5%91%bd%e4%bb%a4)
     - [5.4. Scrapy爬虫的第一个实例](#54-scrapy%e7%88%ac%e8%99%ab%e7%9a%84%e7%ac%ac%e4%b8%80%e4%b8%aa%e5%ae%9e%e4%be%8b)
 
+本文主要内容摘要自公开课[Python网络爬虫与信息提取](http://www.icourse163.org/course/BIT-1001870001?tid=1001962001)，少部分内容来自网络上的其他文章。
+
 ## 1. Requests库使用
 
 ### 1.1. 安装requests库
