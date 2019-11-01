@@ -7,5 +7,8 @@
 class MarxspiderPipeline(object):   
     def process_item(self, item, spider): 
     #for ir in range(item["link"]):
-        print(item["link"])
+        fname = 'text.txt'
+        with open(fname,'ab') as f:
+            text = item["text"].encode('utf-8')
+            f.write(text)
         return item

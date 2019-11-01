@@ -16,12 +16,16 @@ class MarxSpider(scrapy.Spider):
         #每个链接的编号，xpath+正则，其实这样麻烦了,scrapy麻烦就在于此，一个for循环就解决的问题。
         for ir in item["link"]:
             urls = url+ir
-            print(urls)
+            #print(urls)
         #print(len(item["link"]))
         #调试用
-            #yield scrapy.Request(urls,callback=self.text_parse)
+            yield scrapy.Request(urls,callback=self.text_parse)
             #回调函数，下一步爬取requests
     
     def text_parse(self, response):
         #爬取每一个章节的文字
-        pass
+        item = MarxspiderItem()
+        item["text"] = response.text
+        yield item
+
+        
