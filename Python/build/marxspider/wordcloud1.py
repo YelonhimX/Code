@@ -7,7 +7,7 @@ import wordcloud # 词云展示库
 from PIL import Image # 图像处理库
 import matplotlib.pyplot as plt # 图像展示库
 
-fname = 'C://Users//lenovo//Documents//Code//Python//build//marxspider//text.txt'
+fname = "C://Users//lenovo//Desktop//全会.txt"
 # 读取文件
 fn = open(fname,encoding='utf-8') # 打开文件
 string_data = fn.read() # 读出整个文件
@@ -33,11 +33,12 @@ word_counts_top10 = word_counts.most_common(10) # 获取前10最高频的词
 print (word_counts_top10) # 输出检查
 
 # 词频展示
-mask = np.array(Image.open('C://Users//lenovo//Desktop//图片//jungeMarx.jpg')) # 定义词频背景
+mask = np.array(Image.open('C://Users//lenovo//Desktop//图片//党徽.jpg')) # 定义词频背景
 wc = wordcloud.WordCloud(
     font_path='C:/Windows/Fonts/simhei.ttf', # 设置字体格式
+    background_color='White',#背景颜色
     mask=mask, # 设置背景图
-    max_words=500, # 最多显示词数
+    max_words=150, # 最多显示词数
     max_font_size=100, # 字体最大值
     scale=2.0#增加画幅，浮点数2.0倍
 )
@@ -47,6 +48,6 @@ image_colors = wordcloud.ImageColorGenerator(mask) # 从背景图建立颜色方
 wc.recolor(color_func=image_colors) # 将词云颜色设置为背景图方案
 plt.imshow(wc) # 显示词云
 plt.axis('off') # 关闭坐标轴
-plt.show() # 显示图像
+#plt.show() # 显示图像
 
-wc.to_file("marx.jpg") #使用to_file输出为图片
+wc.to_file("Communique .jpg") #使用to_file输出为图片
