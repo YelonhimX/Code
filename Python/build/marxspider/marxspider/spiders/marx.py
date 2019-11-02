@@ -15,7 +15,9 @@ class MarxSpider(scrapy.Spider):
         item["link"] = response.xpath("//a/@href").re(r'\d{3}.htm.*?')
         #每个链接的编号，xpath+正则，其实这样麻烦了,scrapy麻烦就在于此，一个for循环就解决的问题。
         for ir in item["link"]:
-            urls = url+ir
+            if ir != "000.htm":
+                urls = url + ir
+                #滤除了前言对文字池的污染
             #print(urls)
         #print(len(item["link"]))
         #调试用
