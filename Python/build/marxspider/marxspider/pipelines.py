@@ -9,6 +9,10 @@ class MarxspiderPipeline(object):
     #for ir in range(item["link"]):
         fname = 'text.txt'
         with open(fname,'ab') as f:
-            text = item["text"].encode('utf-8')
-            f.write(text)
+            #二进制打开
+            text = item["text"]
+            #.encode('utf-8')←这里的text是list类型.encode方法不合法
+            for cnt in text:
+                f.write(cnt.encode('utf-8'))
+                #遍历list类型里的每一个元素进行写入
         return item

@@ -25,7 +25,11 @@ class MarxSpider(scrapy.Spider):
     def text_parse(self, response):
         #爬取每一个章节的文字
         item = MarxspiderItem()
-        item["text"] = response.text
+        text = response.xpath("//body/text()|/html/body/div[2]/table/tbody/tr/td/text()").extract()
+        #通过观察网页源代码得出需要爬取的字符串块
+        #注意到response.text返回的是文本型内容
+        #而如果想要爬取图片可以采用response.content方法
+        item["text"] = text
         yield item
 
         

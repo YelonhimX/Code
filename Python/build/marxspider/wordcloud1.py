@@ -39,7 +39,7 @@ wc = wordcloud.WordCloud(
     mask=mask, # 设置背景图
     max_words=1600, # 最多显示词数
     max_font_size=100, # 字体最大值
-    scale=2.0
+    scale=2.0#增加画幅，浮点数2.0倍
 )
 
 wc.generate_from_frequencies(word_counts) # 从字典生成词云
